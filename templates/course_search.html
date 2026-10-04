@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Course Search | College Information Portal</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #e8f9ff, #f4fbff);
+            color: #12345b;
+            min-height: 100vh;
+        }
+
+        /* ================= NAVBAR ================= */
+
+        nav {
+            background: linear-gradient(90deg, #087f8c, #0875d1);
+            padding: 16px 5%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        }
+
+        .logo {
+            color: white;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 14px;
+            border-radius: 20px;
+            transition: 0.3s;
+            font-size: 14px;
+        }
+
+        .nav-links a:hover,
+        .nav-links .active {
+            background: rgba(255,255,255,0.22);
+        }
+
+        /* ================= HERO ================= */
+
+        .hero {
+            width: 92%;
+            margin: 28px auto 20px;
+            padding: 42px 35px;
+            border-radius: 25px;
+            background: linear-gradient(135deg, #0875d1, #08a6a6);
+            color: white;
+            box-shadow: 0 10px 30px rgba(0,100,180,0.20);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::after {
+            content: "🎓";
+            position: absolute;
+            right: 45px;
+            top: 25px;
+            font-size: 90px;
+            opacity: 0.13;
+        }
+
+        .hero h1 {
+            font-size: 34px;
+            margin-bottom: 12px;
+        }
+
+        .hero p {
+            font-size: 16px;
+            opacity: 0.95;
+            max-width: 700px;
+            line-height: 1.6;
+        }
+
+        .database-badge {
+            display: inline-block;
+            margin-top: 18px;
+            padding: 9px 15px;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.18);
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        /* ================= SEARCH BOX ================= */
+
+        .search-box {
+            width: 92%;
+            margin: 0 auto 20px;
+            background: white;
+            padding: 24px;
+            border-radius: 20px;
+            box-shadow: 0 6px 22px rgba(0,0,0,0.08);
+        }
+
+        .search-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #064f91;
+            margin-bottom: 14px;
+        }
+
+        .search-form {
+            display: flex;
+            gap: 12px;
+        }
+
+        .input-wrapper {
+            flex: 1;
+            position: relative;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 18px;
+        }
+
+        .search-form input {
+            width: 100%;
+            padding: 16px 18px 16px 48px;
+            border: 2px solid #d7e8f5;
+            border-radius: 13px;
+            outline: none;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+
+        .search-form input:focus {
+            border-color: #0875d1;
+            box-shadow: 0 0 0 4px rgba(8,117,209,0.08);
+        }
+
+        .search-form button {
+            border: none;
+            padding: 15px 26px;
+            border-radius: 13px;
+            background: linear-gradient(90deg, #0875d1, #08a6a6);
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            white-space: nowrap;
+        }
+
+        .search-form button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0,100,200,0.25);
+        }
+
+        /* ================= POPULAR COURSES ================= */
+
+        .popular {
+            margin-top: 18px;
+        }
+
+        .popular-title {
+            font-size: 13px;
+            color: #71879a;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .course-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 9px;
+        }
+
+        .course-chip {
+            text-decoration: none;
+            color: #0875d1;
+            background: #edf8ff;
+            border: 1px solid #cfeafa;
+            padding: 8px 13px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .course-chip:hover {
+            background: #0875d1;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* ================= RESULTS ================= */
+
+        .results-area {
+            width: 92%;
+            margin: auto;
+            padding-bottom: 40px;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 22px 0 18px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .results-header h2 {
+            font-size: 24px;
+            color: #064f91;
+        }
+
+        .count {
+            background: #dff4ff;
+            color: #0875d1;
+            padding: 9px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 13px;
+        }
+
+        /* ================= COLLEGE CARD ================= */
+
+        .college-card {
+            background: white;
+            border-radius: 22px;
+            margin-bottom: 20px;
+            padding: 16px;
+            display: grid;
+            grid-template-columns: 230px 1fr 210px;
+            gap: 20px;
+            align-items: center;
+            box-shadow: 0 7px 25px rgba(0,0,0,0.09);
+            transition: 0.3s;
+            border: 1px solid #e4f2fa;
+        }
+
+        .college-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 14px 32px rgba(0,100,180,0.17);
+        }
+
+        /* ================= IMAGE ================= */
+
+        .image-container {
+            position: relative;
+        }
+
+        .college-image {
+            width: 100%;
+            height: 170px;
+            object-fit: cover;
+            border-radius: 16px;
+            background: #e9f5fa;
+            display: block;
+        }
+
+        .college-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(0,0,0,0.65);
+            color: white;
+            padding: 6px 9px;
+            border-radius: 15px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        /* ================= INFORMATION ================= */
+
+        .college-info h3 {
+            color: #064f91;
+            font-size: 21px;
+            line-height: 1.35;
+            margin-bottom: 9px;
+        }
+
+        .location {
+            color: #607d94;
+            margin-bottom: 13px;
+            font-size: 14px;
+        }
+
+        .course-tag {
+            display: inline-block;
+            background: linear-gradient(90deg, #e4f6ff, #e9ffff);
+            color: #0875d1;
+            padding: 8px 13px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 14px;
+        }
+
+        .details {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .detail {
+            background: #f5faff;
+            border: 1px solid #e0edf5;
+            padding: 8px 11px;
+            border-radius: 9px;
+            font-size: 12px;
+            color: #42627b;
+        }
+
+        /* ================= SIDE INFORMATION ================= */
+
+        .side-info {
+            background: #f3faff;
+            border-radius: 16px;
+            padding: 17px;
+            border: 1px solid #e1f0f8;
+        }
+
+        .side-item {
+            margin-bottom: 13px;
+        }
+
+        .side-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .side-label {
+            display: block;
+            color: #7790a4;
+            font-size: 12px;
+            margin-bottom: 4px;
+        }
+
+        .side-value {
+            color: #064f91;
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        /* ================= BUTTONS ================= */
+
+        .buttons {
+            margin-top: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .btn {
+            text-align: center;
+            padding: 11px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 13px;
+            transition: 0.3s;
+        }
+
+        .view-btn {
+            background: linear-gradient(90deg, #0875d1, #08a6a6);
+            color: white;
+        }
+
+        .compare-btn {
+            border: 2px solid #0875d1;
+            color: #0875d1;
+            background: white;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        /* ================= EMPTY / NO RESULTS ================= */
+
+        .no-results {
+            background: white;
+            border-radius: 22px;
+            padding: 55px 25px;
+            text-align: center;
+            box-shadow: 0 7px 25px rgba(0,0,0,0.08);
+            border: 1px solid #e4f2fa;
+        }
+
+        .no-results .icon {
+            font-size: 55px;
+            margin-bottom: 15px;
+        }
+
+        .no-results h2 {
+            margin-bottom: 10px;
+            color: #064f91;
+            font-size: 24px;
+        }
+
+        .no-results p {
+            color: #6d8497;
+            line-height: 1.6;
+        }
+
+        /* ================= MOBILE ================= */
+
+        @media (max-width: 900px) {
+
+            .college-card {
+                grid-template-columns: 190px 1fr;
+            }
+
+            .side-info {
+                grid-column: 1 / -1;
+            }
+
+            .buttons {
+                flex-direction: row;
+            }
+
+            .btn {
+                flex: 1;
+            }
+        }
+
+        @media (max-width: 650px) {
+
+            nav {
+                justify-content: center;
+            }
+
+            .logo {
+                width: 100%;
+                text-align: center;
+                font-size: 19px;
+            }
+
+            .nav-links {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .hero {
+                padding: 28px 22px;
+            }
+
+            .hero::after {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 26px;
+            }
+
+            .hero p {
+                font-size: 14px;
+            }
+
+            .search-box {
+                padding: 18px;
+            }
+
+            .search-form {
+                flex-direction: column;
+            }
+
+            .search-form button {
+                width: 100%;
+            }
+
+            .college-card {
+                grid-template-columns: 1fr;
+            }
+
+            .college-image {
+                height: 210px;
+            }
+
+            .side-info {
+                grid-column: auto;
+            }
+
+            .buttons {
+                flex-direction: column;
+            }
+
+            .results-header h2 {
+                font-size: 20px;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+
+<nav>
+
+    <div class="logo">
+        🎓 College Information Portal
+    </div>
+
+    <div class="nav-links">
+
+        <a href="/">
+            🏠 Home
+        </a>
+
+        <a href="/top-colleges">
+            🏆 Top Colleges
+        </a>
+
+        <a href="/compare">
+            ⚖️ Compare
+        </a>
+
+        <a href="/course-search" class="active">
+            🎓 Course Search
+        </a>
+
+        <a href="/crawler">
+            🌐 Web Crawler
+        </a>
+
+    </div>
+
+</nav>
+
+
+<!-- ================= HERO ================= -->
+
+<section class="hero">
+
+    <h1>🎓 Find Colleges by Course</h1>
+
+    <p>
+        Search for a course and discover matching colleges
+        available in our college database.
+    </p>
+
+    <div class="database-badge">
+        📚 Search within our college database
+    </div>
+
+</section>
+
+
+<!-- ================= SEARCH ================= -->
+
+<section class="search-box">
+
+    <div class="search-title">
+        🔍 What course are you looking for?
+    </div>
+
+    <form
+        method="POST"
+        action="/course-search"
+        class="search-form"
+    >
+
+        <div class="input-wrapper">
+
+            <span class="search-icon">
+                🔎
+            </span>
+
+            <input
+                type="text"
+                name="course"
+                placeholder="Example: BSc Biotechnology, BSc CS, BCom..."
+                value="{{ search_course }}"
+                required
+            >
+
+        </div>
+
+        <button type="submit">
+            Search Colleges
+        </button>
+
+    </form>
+
+
+    <!-- POPULAR COURSES -->
+
+    <div class="popular">
+
+        <div class="popular-title">
+            🔥 Popular Courses
+        </div>
+
+        <div class="course-chips">
+
+            <a href="/course-search?course=BSc CS"
+               class="course-chip">
+                BSc CS
+            </a>
+
+            <a href="/course-search?course=BSc Biotechnology"
+               class="course-chip">
+                BSc Biotechnology
+            </a>
+
+            <a href="/course-search?course=BSc IT"
+               class="course-chip">
+                BSc IT
+            </a>
+
+            <a href="/course-search?course=BCom"
+               class="course-chip">
+                BCom
+            </a>
+
+            <a href="/course-search?course=BMS"
+               class="course-chip">
+                BMS
+            </a>
+
+            <a href="/course-search?course=BA"
+               class="course-chip">
+                BA
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= RESULTS ================= -->
+
+<section class="results-area">
+
+    {% if search_course %}
+
+        <div class="results-header">
+
+            <h2>
+                Results for "{{ search_course }}"
+            </h2>
+
+            <span class="count">
+                {{ results|length }} College(s) Found
+            </span>
+
+        </div>
+
+
+        {% if results %}
+
+            {% for college in results %}
+
+                <div class="college-card">
+
+                    <!-- IMAGE -->
+
+                    <div class="image-container">
+
+                        <img
+                            class="college-image"
+                            src="{{ url_for('static', filename='images/' + college['image']) }}"
+                            alt="{{ college['Full Name'] }}"
+                            onerror="this.style.display='none'"
+                        >
+
+                        <span class="college-badge">
+                            COLLEGE
+                        </span>
+
+                    </div>
+
+
+                    <!-- INFORMATION -->
+
+                    <div class="college-info">
+
+                        <h3>
+                            {{ college["Full Name"] }}
+                        </h3>
+
+                        <div class="location">
+                            📍 {{ college["Location"] }}
+                        </div>
+
+                        <span class="course-tag">
+                            🎓 {{ search_course }}
+                        </span>
+
+                        <div class="details">
+
+                            <span class="detail">
+                                🏛️ {{ college["Type"] }}
+                            </span>
+
+                            <span class="detail">
+                                📅 Established {{ college["Established"] }}
+                            </span>
+
+                            <span class="detail">
+                                📚 {{ college["Admission"] }}
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- SIDE INFORMATION -->
+
+                    <div class="side-info">
+
+                        <div class="side-item">
+
+                            <span class="side-label">
+                                💰 Fees
+                            </span>
+
+                            <span class="side-value">
+                                {{ college["Fees"] }}
+                            </span>
+
+                        </div>
+
+
+                        <div class="side-item">
+
+                            <span class="side-label">
+                                📈 Placement
+                            </span>
+
+                            <span class="side-value">
+                                {{ college["Placement"] }}
+                            </span>
+
+                        </div>
+
+
+                        <div class="buttons">
+
+                            <a
+                                href="/"
+                                class="btn view-btn"
+                            >
+                                👁 View College
+                            </a>
+
+                            <a
+                                href="/compare"
+                                class="btn compare-btn"
+                            >
+                                ⚖️ Compare
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            {% endfor %}
+
+
+        {% else %}
+
+            <div class="no-results">
+
+                <div class="icon">
+                    🔎
+                </div>
+
+                <h2>
+                    No Colleges Found
+                </h2>
+
+                <p>
+                    This course is not currently available
+                    in our college database.
+                </p>
+
+            </div>
+
+        {% endif %}
+
+
+    {% else %}
+
+        <div class="no-results">
+
+            <div class="icon">
+                🎓
+            </div>
+
+            <h2>
+                Start Your Course Search
+            </h2>
+
+            <p>
+                Enter a course name above or select one of the
+                popular courses to find matching colleges.
+            </p>
+
+        </div>
+
+    {% endif %}
+
+</section>
+
+
+</body>
+</html>

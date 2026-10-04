@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Top Colleges</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f3f6fb;
+            color: #172554;
+        }
+
+        /* HERO */
+
+        .hero {
+            background: linear-gradient(135deg, #123b8e, #2874e8);
+            color: white;
+            text-align: center;
+            padding: 55px 20px 70px;
+        }
+
+        .hero h1 {
+            font-size: 42px;
+            margin-bottom: 15px;
+            font-weight: 800;
+        }
+
+        .hero h1 span {
+            color: #ffd21f;
+        }
+
+        .hero p {
+            font-size: 18px;
+            max-width: 700px;
+            margin: auto;
+            line-height: 1.6;
+            opacity: 0.95;
+        }
+
+        /* SECTION */
+
+        .container {
+            max-width: 1200px;
+            margin: -35px auto 50px;
+            padding: 0 20px;
+        }
+
+        .section-title {
+            background: white;
+            border-radius: 22px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+
+        .section-title h2 {
+            font-size: 28px;
+            color: #173b82;
+            margin-bottom: 8px;
+        }
+
+        .section-title p {
+            color: #667085;
+            font-size: 16px;
+        }
+
+        /* COLLEGE GRID */
+
+        .college-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+            gap: 25px;
+        }
+
+        /* CARD */
+
+        .college-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 7px 22px rgba(0,0,0,0.10);
+            transition: 0.3s;
+        }
+
+        .college-card:hover {
+            transform: translateY(-7px);
+            box-shadow: 0 14px 35px rgba(0,0,0,0.16);
+        }
+
+        /* IMAGE */
+
+        .college-image {
+            width: 100%;
+            height: 210px;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* CONTENT */
+
+        .college-content {
+            padding: 20px;
+        }
+
+        .college-number {
+            display: inline-block;
+            background: #eaf1ff;
+            color: #1757bd;
+            padding: 6px 11px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .college-content h3 {
+            font-size: 21px;
+            color: #163b82;
+            margin-bottom: 10px;
+        }
+
+        .location {
+            color: #667085;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .details {
+            border-top: 1px solid #e6e9ef;
+            padding-top: 13px;
+        }
+
+        .detail {
+            margin: 7px 0;
+            font-size: 14px;
+            color: #475467;
+        }
+
+        .detail strong {
+            color: #172554;
+        }
+
+        .badge {
+            display: inline-block;
+            margin-top: 10px;
+            background: #e9f9ef;
+            color: #15803d;
+            padding: 7px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        /* FOOTER */
+
+        footer {
+            background: #14275b;
+            color: white;
+            text-align: center;
+            padding: 25px 15px;
+            margin-top: 60px;
+        }
+
+        footer p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 600px) {
+
+            .hero {
+                padding: 40px 18px 60px;
+            }
+
+            .hero h1 {
+                font-size: 32px;
+            }
+
+            .hero p {
+                font-size: 16px;
+            }
+
+            .container {
+                padding: 0 15px;
+            }
+
+            .college-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .college-image {
+                height: 200px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- TOP SECTION -->
+
+    <section class="hero">
+
+        <h1>Top <span>Colleges</span></h1>
+
+        <p>
+            Explore leading colleges and universities,
+            their courses, admissions, fees, placements
+            and facilities.
+        </p>
+
+    </section>
+
+
+    <!-- COLLEGES -->
+
+    <div class="container">
+
+        <div class="section-title">
+
+            <h2>🏆 Leading Colleges & Universities</h2>
+
+            <p>
+                Explore detailed information about top institutions.
+            </p>
+
+        </div>
+
+
+        <div class="college-grid">
+
+            {% for name, college in colleges.items() %}
+
+            <div class="college-card">
+
+                <!-- COLLEGE IMAGE -->
+
+                <img
+                    class="college-image"
+                    src="{{ url_for('static', filename='images/' + college['image']) }}"
+                    alt="{{ college['Full Name'] }}"
+                    onerror="this.src='https://via.placeholder.com/600x400?text=College+Image'"
+                >
+
+
+                <div class="college-content">
+
+                    <div class="college-number">
+                        #{{ loop.index }}
+                    </div>
+
+
+                    <h3>
+                        {{ college['Full Name'] }}
+                    </h3>
+
+
+                    <div class="location">
+                        📍 {{ college['Location'] }}
+                    </div>
+
+
+                    <div class="details">
+
+                        <div class="detail">
+                            <strong>Type:</strong>
+                            {{ college['Type'] }}
+                        </div>
+
+                        <div class="detail">
+                            <strong>Established:</strong>
+                            {{ college['Established'] }}
+                        </div>
+
+                        <div class="detail">
+                            <strong>Admission:</strong>
+                            {{ college['Admission'] }}
+                        </div>
+
+                        <div class="detail">
+                            <strong>Courses:</strong>
+                            {{ college['Courses Offered'] }}
+                        </div>
+
+                        <div class="detail">
+                            <strong>Average Package:</strong>
+                            {{ college['Average Package'] }}
+                        </div>
+
+                    </div>
+
+
+                    <div class="badge">
+                        ⭐ {{ college['Placement'] }} Placement
+                    </div>
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+
+    <!-- FOOTER -->
+
+    <footer>
+
+        <p>
+            College Information & Comparison Portal
+        </p>
+
+    </footer>
+
+</body>
+</html>

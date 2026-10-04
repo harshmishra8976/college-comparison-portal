@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Compare Colleges</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f7fc;
+            color: #172554;
+        }
+
+        /* ================= HERO ================= */
+
+        .hero {
+            background:
+                radial-gradient(circle at top right, rgba(255,255,255,0.15), transparent 30%),
+                linear-gradient(135deg, #102a6b, #1769e0, #38a0ff);
+            color: white;
+            text-align: center;
+            padding: 65px 20px 85px;
+        }
+
+        .hero-icon {
+            font-size: 42px;
+            margin-bottom: 12px;
+        }
+
+        .hero h1 {
+            font-size: 44px;
+            margin-bottom: 12px;
+            letter-spacing: -1px;
+        }
+
+        .hero h1 span {
+            color: #ffd43b;
+        }
+
+        .hero p {
+            font-size: 17px;
+            opacity: 0.95;
+        }
+
+        /* ================= MAIN ================= */
+
+        .container {
+            max-width: 1150px;
+            margin: -45px auto 55px;
+            padding: 0 20px;
+        }
+
+        /* ================= SELECT CARD ================= */
+
+        .select-box {
+            background: rgba(255,255,255,0.98);
+            padding: 32px;
+            border-radius: 24px;
+            box-shadow: 0 15px 40px rgba(17, 50, 100, 0.13);
+            margin-bottom: 40px;
+            border: 1px solid #edf1f7;
+        }
+
+        .select-title {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .select-title h2 {
+            color: #123b8e;
+            font-size: 25px;
+            margin-bottom: 7px;
+        }
+
+        .select-title p {
+            color: #667085;
+            font-size: 14px;
+        }
+
+        .selectors {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        .field {
+            background: #f8faff;
+            padding: 20px;
+            border-radius: 17px;
+            border: 1px solid #e3eafa;
+        }
+
+        .field label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #344054;
+        }
+
+        select {
+            width: 100%;
+            padding: 14px 15px;
+            border: 2px solid #dce5f3;
+            border-radius: 12px;
+            background: white;
+            color: #172554;
+            font-size: 15px;
+            outline: none;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        select:hover {
+            border-color: #91b8f5;
+        }
+
+        select:focus {
+            border-color: #2874e8;
+            box-shadow: 0 0 0 4px rgba(40,116,232,0.10);
+        }
+
+        .compare-btn {
+            display: block;
+            margin: 28px auto 0;
+            border: none;
+            padding: 15px 38px;
+            border-radius: 13px;
+            background: linear-gradient(135deg, #1769e0, #123b8e);
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.25s;
+            box-shadow: 0 8px 20px rgba(23,105,224,0.22);
+        }
+
+        .compare-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 27px rgba(23,105,224,0.32);
+        }
+
+        /* ================= RESULT ================= */
+
+        .result-title {
+            text-align: center;
+            margin: 42px 0 25px;
+        }
+
+        .result-title h2 {
+            font-size: 30px;
+            color: #123b8e;
+            margin-bottom: 7px;
+        }
+
+        .result-title p {
+            color: #667085;
+            font-size: 14px;
+        }
+
+        /* ================= COLLEGE HEADER ================= */
+
+        .college-head {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 22px;
+            margin-bottom: 22px;
+        }
+
+        .college-name {
+            position: relative;
+            background: white;
+            padding: 25px 20px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.07);
+            border: 1px solid #e8edf5;
+            overflow: hidden;
+        }
+
+        .college-name::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #1769e0, #38a0ff);
+        }
+
+        .college-number {
+            font-size: 13px;
+            color: #667085;
+            font-weight: bold;
+            margin-bottom: 7px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .college-name h3 {
+            color: #123b8e;
+            font-size: 22px;
+        }
+
+        /* ================= TABLE ================= */
+
+        .comparison-card {
+            background: white;
+            border-radius: 22px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.09);
+            border: 1px solid #e7edf6;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 750px;
+        }
+
+        th {
+            background: linear-gradient(135deg, #123b8e, #1769e0);
+            color: white;
+            padding: 18px 15px;
+            font-size: 16px;
+        }
+
+        th:first-child {
+            width: 25%;
+        }
+
+        td {
+            padding: 17px 15px;
+            border-bottom: 1px solid #e8edf5;
+            text-align: center;
+            font-size: 14.5px;
+            line-height: 1.5;
+            vertical-align: middle;
+        }
+
+        td:first-child {
+            font-weight: bold;
+            color: #123b8e;
+            background: #f7f9fd;
+            text-align: left;
+            width: 25%;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background: #f5f8ff;
+        }
+
+        /* Package highlight */
+
+        .package {
+            font-weight: bold;
+            color: #0f766e;
+            background: #ecfdf8;
+            padding: 7px 10px;
+            border-radius: 8px;
+            display: inline-block;
+        }
+
+        /* ================= BACK ================= */
+
+        .back {
+            text-align: center;
+            margin-top: 32px;
+        }
+
+        .back a {
+            display: inline-block;
+            text-decoration: none;
+            background: white;
+            color: #1757bd;
+            padding: 12px 26px;
+            border-radius: 12px;
+            font-weight: bold;
+            box-shadow: 0 5px 18px rgba(0,0,0,0.07);
+            border: 1px solid #e5ebf4;
+            transition: 0.25s;
+        }
+
+        .back a:hover {
+            background: #1757bd;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* ================= FOOTER ================= */
+
+        footer {
+            background: #101f49;
+            color: #dbe5ff;
+            text-align: center;
+            padding: 28px 20px;
+            font-size: 14px;
+        }
+
+        /* ================= MOBILE ================= */
+
+        @media (max-width: 700px) {
+
+            .hero {
+                padding: 48px 18px 70px;
+            }
+
+            .hero-icon {
+                font-size: 34px;
+            }
+
+            .hero h1 {
+                font-size: 31px;
+            }
+
+            .hero p {
+                font-size: 14px;
+                line-height: 1.5;
+            }
+
+            .container {
+                margin-top: -35px;
+                padding: 0 13px;
+            }
+
+            .select-box {
+                padding: 20px 16px;
+                border-radius: 19px;
+            }
+
+            .selectors,
+            .college-head {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .field {
+                padding: 16px;
+            }
+
+            .compare-btn {
+                width: 100%;
+            }
+
+            .result-title h2 {
+                font-size: 25px;
+            }
+
+            .college-name h3 {
+                font-size: 19px;
+            }
+
+            .comparison-card {
+                border-radius: 16px;
+            }
+
+            table {
+                min-width: 720px;
+            }
+
+            td,
+            th {
+                padding: 14px 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ================= HERO ================= -->
+
+    <section class="hero">
+
+        <div class="hero-icon">⚖️</div>
+
+        <h1>
+            <span>Compare</span> Colleges
+        </h1>
+
+        <p>
+            Compare important college information in one place.
+        </p>
+
+    </section>
+
+
+    <div class="container">
+
+        <!-- ================= SELECT COLLEGES ================= -->
+
+        <div class="select-box">
+
+            <div class="select-title">
+
+                <h2>🔍 Select Colleges</h2>
+
+                <p>
+                    Choose two colleges to see their details side by side.
+                </p>
+
+            </div>
+
+
+            <form method="POST">
+
+                <div class="selectors">
+
+                    <div class="field">
+
+                        <label>🏫 College 1</label>
+
+                        <select name="college1" required>
+
+                            {% for name in colleges.keys() %}
+
+                            <option value="{{ name }}">
+                                {{ name.title() }}
+                            </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>🏫 College 2</label>
+
+                        <select name="college2" required>
+
+                            {% for name in colleges.keys() %}
+
+                            <option value="{{ name }}">
+                                {{ name.title() }}
+                            </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <button type="submit" class="compare-btn">
+                    ⚡ Compare Colleges
+                </button>
+
+            </form>
+
+        </div>
+
+
+        {% if college1 and college2 %}
+
+        <!-- ================= RESULT ================= -->
+
+        <div class="result-title">
+
+            <h2>📊 Comparison Result</h2>
+
+            <p>
+                Side-by-side comparison of selected colleges
+            </p>
+
+        </div>
+
+
+        <!-- ================= COLLEGE NAMES ================= -->
+
+        <div class="college-head">
+
+            <div class="college-name">
+
+                <div class="college-number">
+                    College 1
+                </div>
+
+                <h3>
+                    {{ college1["Short Name"] }}
+                </h3>
+
+            </div>
+
+
+            <div class="college-name">
+
+                <div class="college-number">
+                    College 2
+                </div>
+
+                <h3>
+                    {{ college2["Short Name"] }}
+                </h3>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================= COMPARISON TABLE ================= -->
+
+        <div class="comparison-card">
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <tr>
+
+                        <th>Feature</th>
+
+                        <th>
+                            {{ college1["Short Name"] }}
+                        </th>
+
+                        <th>
+                            {{ college2["Short Name"] }}
+                        </th>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>📍 Location</td>
+
+                        <td>
+                            {{ college1["Location"] }}
+                        </td>
+
+                        <td>
+                            {{ college2["Location"] }}
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>📅 Established</td>
+
+                        <td>
+                            {{ college1["Established"] }}
+                        </td>
+
+                        <td>
+                            {{ college2["Established"] }}
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>💰 Fees</td>
+
+                        <td>
+                            {{ college1["Fees"] }}
+                        </td>
+
+                        <td>
+                            {{ college2["Fees"] }}
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>🎓 Courses</td>
+
+                        <td>
+                            {{ college1["Courses Offered"] }}
+                        </td>
+
+                        <td>
+                            {{ college2["Courses Offered"] }}
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>📝 Admission</td>
+
+                        <td>
+                            {{ college1["Admission"] }}
+                        </td>
+
+                        <td>
+                            {{ college2["Admission"] }}
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>💼 Placement</td>
+
+                        <td>
+                            {{ college1["Placement"] }}
+                        </td>
+
+                        <td>
+                            {{ college2["Placement"] }}
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>💵 Average Package</td>
+
+                        <td>
+                            <span class="package">
+                                {{ college1["Average Package"] }}
+                            </span>
+                        </td>
+
+                        <td>
+                            <span class="package">
+                                {{ college2["Average Package"] }}
+                            </span>
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>🏆 Highest Package</td>
+
+                        <td>
+                            <span class="package">
+                                {{ college1["Highest Package"] }}
+                            </span>
+                        </td>
+
+                        <td>
+                            <span class="package">
+                                {{ college2["Highest Package"] }}
+                            </span>
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>🏢 Facilities</td>
+
+                        <td>
+                            {{ college1["Facilities"] }}
+                        </td>
+
+                        <td>
+                            {{ college2["Facilities"] }}
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>⭐ Review</td>
+
+                        <td>
+                            {{ college1["Review"] }}
+                        </td>
+
+                        <td>
+                            {{ college2["Review"] }}
+                        </td>
+
+                    </tr>
+
+                </table>
+
+            </div>
+
+        </div>
+
+        {% endif %}
+
+
+        <!-- ================= BACK ================= -->
+
+        <div class="back">
+
+            <a href="/">
+                ← Back to Home
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= FOOTER ================= -->
+
+    <footer>
+        College Comparison Portal
+    </footer>
+
+</body>
+</html>

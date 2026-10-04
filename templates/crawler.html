@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>College Web Crawler</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            color: #1f2937;
+        }
+
+        /* NAVBAR */
+
+        nav {
+            background: #111827;
+            padding: 16px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        nav .logo {
+            color: white;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            font-weight: bold;
+        }
+
+        nav a:hover {
+            color: #60a5fa;
+        }
+
+        /* HERO */
+
+        .hero {
+            background: linear-gradient(
+                135deg,
+                #2563eb,
+                #4f46e5
+            );
+
+            color: white;
+
+            padding: 55px 20px;
+
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 38px;
+            margin-bottom: 10px;
+        }
+
+        .hero p {
+            font-size: 17px;
+            opacity: 0.95;
+        }
+
+        /* CONTAINER */
+
+        .container {
+            width: 92%;
+            max-width: 1100px;
+            margin: 35px auto;
+        }
+
+        /* CARD */
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 25px;
+
+            box-shadow:
+                0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .card h2 {
+            margin-top: 0;
+        }
+
+        /* FORM */
+
+        select {
+            width: 100%;
+            padding: 14px;
+
+            border: 1px solid #d1d5db;
+            border-radius: 10px;
+
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+
+            border: none;
+            border-radius: 10px;
+
+            background: #2563eb;
+            color: white;
+
+            font-size: 16px;
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        /* SUCCESS */
+
+        .success {
+            border-left: 5px solid #16a34a;
+        }
+
+        .success h2 {
+            color: #15803d;
+        }
+
+        /* ERROR */
+
+        .error {
+            border-left: 5px solid #dc2626;
+            color: #991b1b;
+        }
+
+        /* WEBSITE INFO */
+
+        .website-url {
+            background: #f3f4f6;
+
+            padding: 12px;
+
+            border-radius: 8px;
+
+            word-break: break-all;
+
+            margin-top: 10px;
+        }
+
+        /* HEADINGS */
+
+        .heading-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .heading-tag {
+            background: #eff6ff;
+
+            color: #1d4ed8;
+
+            padding: 10px 14px;
+
+            border-radius: 20px;
+
+            font-size: 14px;
+        }
+
+        /* LINKS */
+
+        .links-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(auto-fit, minmax(230px, 1fr));
+
+            gap: 12px;
+        }
+
+        .website-link {
+            display: flex;
+
+            align-items: center;
+            justify-content: space-between;
+
+            background: #f8fafc;
+
+            border: 1px solid #e5e7eb;
+
+            padding: 13px 15px;
+
+            border-radius: 10px;
+
+            color: #2563eb;
+
+            text-decoration: none;
+
+            font-weight: bold;
+
+            transition: 0.2s;
+        }
+
+        .website-link:hover {
+            background: #eff6ff;
+
+            border-color: #2563eb;
+
+            transform: translateY(-2px);
+        }
+
+        .arrow {
+            font-size: 18px;
+        }
+
+        /* CONTENT */
+
+        .content-box {
+            background: #f8fafc;
+
+            border-radius: 10px;
+
+            padding: 18px;
+
+            line-height: 1.7;
+
+            max-height: 350px;
+
+            overflow-y: auto;
+        }
+
+        /* TIP */
+
+        .tip {
+            background: #fff7ed;
+
+            border-left: 5px solid #f97316;
+
+            padding: 15px;
+
+            border-radius: 8px;
+
+            margin-top: 20px;
+        }
+
+        /* LOADING */
+
+        #loading {
+            display: none;
+
+            text-align: center;
+
+            margin-top: 15px;
+
+            color: #2563eb;
+
+            font-weight: bold;
+        }
+
+        /* FOOTER */
+
+        footer {
+            background: #111827;
+
+            color: white;
+
+            text-align: center;
+
+            padding: 25px;
+
+            margin-top: 50px;
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 600px) {
+
+            .hero h1 {
+                font-size: 28px;
+            }
+
+            nav {
+                text-align: center;
+                justify-content: center;
+                gap: 10px;
+            }
+
+            nav a {
+                margin-left: 8px;
+            }
+
+            .container {
+                width: 94%;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- NAVBAR -->
+
+<nav>
+
+    <div class="logo">
+        🎓 College Comparison Portal
+    </div>
+
+    <div>
+
+        <a href="/">
+            Home
+        </a>
+
+        <a href="/compare">
+            Compare
+        </a>
+
+        <a href="/crawler">
+            🌐 Web Crawler
+        </a>
+
+    </div>
+
+</nav>
+
+
+<!-- HERO -->
+
+<section class="hero">
+
+    <h1>
+        🌐 College Web Crawler
+    </h1>
+
+    <p>
+        Select a college and explore information directly
+        from its official website.
+    </p>
+
+</section>
+
+
+<div class="container">
+
+
+    <!-- SELECT COLLEGE -->
+
+    <div class="card">
+
+        <h2>
+            🔎 Select College
+        </h2>
+
+        <form method="POST"
+              onsubmit="showLoading()">
+
+            <select name="college" required>
+
+                <option value="">
+                    -- Select a College --
+                </option>
+
+                {% for key, college in colleges.items() %}
+
+                    <option value="{{ key }}"
+                        {% if selected == key %}
+                            selected
+                        {% endif %}>
+
+                        {{ key }}
+
+                    </option>
+
+                {% endfor %}
+
+            </select>
+
+
+            <button type="submit">
+
+                🌐 Crawl Official Website
+
+            </button>
+
+        </form>
+
+
+        <div id="loading">
+
+            ⏳ Crawling website... Please wait.
+
+        </div>
+
+    </div>
+
+
+    <!-- ERROR -->
+
+    {% if result and not result.success %}
+
+        <div class="card error">
+
+            <h2>
+                ❌ Crawling Failed
+            </h2>
+
+            <p>
+                {{ result.error }}
+            </p>
+
+        </div>
+
+    {% endif %}
+
+
+    {% if result and result.success %}
+
+
+        <!-- SUCCESS -->
+
+        <div class="card success">
+
+            <h2>
+                ✅ Website Crawled Successfully
+            </h2>
+
+            <p>
+                The crawler successfully collected
+                information from the selected college website.
+            </p>
+
+            <div class="website-url">
+
+                <strong>
+                    Website:
+                </strong>
+
+                {{ result.url }}
+
+            </div>
+
+        </div>
+
+
+        <!-- TITLE -->
+
+        <div class="card">
+
+            <h2>
+                📄 Website Title
+            </h2>
+
+            <p>
+                {{ result.title or "Not available" }}
+            </p>
+
+        </div>
+
+
+        <!-- DESCRIPTION -->
+
+        <div class="card">
+
+            <h2>
+                📝 Website Description
+            </h2>
+
+            <p>
+                {{ result.description or
+                   "Description not available." }}
+            </p>
+
+        </div>
+
+
+        <!-- HEADINGS -->
+
+        <div class="card">
+
+            <h2>
+                📌 Extracted Headings
+            </h2>
+
+            {% if result.headings %}
+
+                <div class="heading-list">
+
+                    {% for heading in result.headings %}
+
+                        <span class="heading-tag">
+
+                            {{ heading }}
+
+                        </span>
+
+                    {% endfor %}
+
+                </div>
+
+            {% else %}
+
+                <p>
+                    No headings found.
+                </p>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- WEBSITE LINKS -->
+
+        <div class="card">
+
+            <h2>
+                🔗 Website Links
+            </h2>
+
+            <p>
+                Click any link below to open the
+                original page of the college website.
+            </p>
+
+
+            {% if result.links %}
+
+                <div class="links-grid">
+
+                    {% for link in result.links %}
+
+                        <a
+                            href="{{ link.url }}"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="website-link"
+                        >
+
+                            <span>
+                                {{ link.text }}
+                            </span>
+
+                            <span class="arrow">
+                                ↗
+                            </span>
+
+                        </a>
+
+                    {% endfor %}
+
+                </div>
+
+            {% else %}
+
+                <p>
+                    No website links were found.
+                </p>
+
+            {% endif %}
+
+
+            <div class="tip">
+
+                💡 <strong>Tip:</strong>
+
+                Click the
+                <strong>↗</strong>
+                icon/link to open the original
+                college website page in a new tab.
+
+            </div>
+
+        </div>
+
+
+        <!-- CRAWLED CONTENT -->
+
+        <div class="card">
+
+            <h2>
+                📚 Crawled Website Content
+            </h2>
+
+            <div class="content-box">
+
+                {{ result.text or
+                   "No readable content found." }}
+
+            </div>
+
+        </div>
+
+
+    {% endif %}
+
+
+</div>
+
+
+<!-- FOOTER -->
+
+<footer>
+
+    <p>
+        🎓 College Comparison Portal
+    </p>
+
+    <p>
+        Web Crawler Module
+    </p>
+
+</footer>
+
+
+<script>
+
+function showLoading() {
+
+    document.getElementById("loading").style.display = "block";
+
+}
+
+</script>
+
+
+</body>
+
+</html>
